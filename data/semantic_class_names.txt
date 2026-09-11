@@ -1,0 +1,52 @@
+0,Axle weight limit
+1,Bus stop
+2,Cattle
+3,Crossroads
+4,Dip
+5,Falling rocks
+6,Filling station
+7,First aid post
+8,Give way
+9,Guarded level crossing ahead
+10,Height limit
+11,Horn prohibited
+12,Hotel
+13,Length limit
+14,Level crossing countdown marker
+15,Loose gravel
+16,Maximum speed limit (110 km/h)
+17,Maximum speed limit (90 km/h)
+18,Narrow bridge
+19,Narrow road
+20,No entry
+21,No entry for bullock carts
+22,No entry for cycles
+23,No entry for goods vehicles
+24,No entry for hand carts
+25,No entry for motor vehicles
+26,No entry for pedestrians
+27,No left turn
+28,No overtaking
+29,No parking
+30,No right turn
+31,No stopping
+32,No vehicles in both directions
+33,Oblique side road junction
+34,One-way traffic
+35,Parking
+36,Refreshments
+37,Restaurant
+38,Road hump
+39,Roundabout
+40,Side road junction
+41,Staggered side road junction
+42,Steep ascent
+43,Steep descent
+44,T-junction
+45,Telephone
+46,Turn left
+47,Turn right
+48,Unguarded level crossing ahead
+49,Unprotected quay
+50,Weight limit
+51,Y-junction
