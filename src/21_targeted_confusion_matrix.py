@@ -37,7 +37,7 @@ print("Number of classes:", len(class_names))
 # ==========================================
 
 model = tf.keras.models.load_model(
-    "traffic_sign_targeted_model.keras"
+    "models/traffic_sign_targeted_model.keras"
 )
 
 
