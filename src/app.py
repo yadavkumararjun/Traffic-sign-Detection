@@ -1,51 +1,93 @@
+from pathlib import Path
+import sys
+
 import streamlit as st
 
-from components.sidebar import show_sidebar
 
-from pages.dashboard import show_dashboard
-from pages.detect import show_detect
-from pages.model_info import show_model_info
-from pages.traffic_signs import show_traffic_signs
+# ============================================================
+# PATH SETUP
+# ============================================================
+
+SRC_DIR = Path(__file__).resolve().parent
+
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 
-# --------------------------------------------------
-# PAGE CONFIGURATION
-# --------------------------------------------------
+# ============================================================
+# PAGE CONFIG
+# ============================================================
 
 st.set_page_config(
-    page_title="SignVision",
+    page_title="Traffic Sign AI",
     page_icon="🚦",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
 
-# --------------------------------------------------
-# SIDEBAR
-# --------------------------------------------------
+# ============================================================
+# IMPORT PAGES
+# ============================================================
 
-page = show_sidebar()
+from dashboard import (
+    render_sidebar,
+    render_dashboard
+)
+
+from pages.prediction import (
+    render_prediction
+)
+
+from pages.performance import (
+    render_performance
+)
+
+from pages.classes import (
+    render_classes
+)
+
+from pages.about import (
+    render_about
+)
 
 
-# --------------------------------------------------
-# PAGE ROUTING
-# --------------------------------------------------
+# ============================================================
+# SIDEBAR NAVIGATION
+# ============================================================
 
-if page == "🏠 Dashboard":
-
-    show_dashboard()
+selected_page = render_sidebar()
 
 
-elif page == "🖼️ Detect Sign":
+# ============================================================
+# ROUTING
+# ============================================================
 
-    show_detect()
+if selected_page == "Dashboard":
+
+    render_dashboard()
 
 
-elif page == "📊 Model":
+elif selected_page == "Prediction":
 
-    show_model_info()
+    render_prediction()
 
 
-elif page == "📚 Traffic Signs":
+elif selected_page == "Performance":
 
-    show_traffic_signs()
+    render_performance()
+
+
+elif selected_page == "Traffic Classes":
+
+    render_classes()
+
+
+elif selected_page == "About":
+
+    render_about()
+
+
+else:
+
+    render_dashboard()
