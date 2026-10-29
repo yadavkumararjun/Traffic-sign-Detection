@@ -7,9 +7,7 @@ layers = tf.keras.layers
 models = tf.keras.models
 
 
-# ==========================================
-# 1. SETTINGS
-# ==========================================
+
 
 IMAGE_SIZE = 32
 BATCH_SIZE = 32
@@ -19,9 +17,9 @@ MODEL_PATH = "models/traffic_sign_robust_model.keras"
 HISTORY_PATH = "data/robust_training_history.json"
 
 
-# ==========================================
+
 # 2. LOAD DATA
-# ==========================================
+
 
 print("\nLoading training data...")
 
@@ -49,9 +47,9 @@ num_classes = len(
 print("\nNumber of classes:", num_classes)
 
 
-# ==========================================
+
 # 4. DATA AUGMENTATION
-# ==========================================
+
 
 augmentation = tf.keras.Sequential([
 
@@ -76,9 +74,9 @@ augmentation = tf.keras.Sequential([
 ], name="traffic_sign_augmentation")
 
 
-# ==========================================
+
 # 5. BUILD CNN
-# ==========================================
+
 
 model = models.Sequential([
 
@@ -184,9 +182,9 @@ model = models.Sequential([
 ])
 
 
-# ==========================================
+
 # 6. MODEL SUMMARY
-# ==========================================
+
 
 print("\n========================================")
 print("MODEL ARCHITECTURE")
@@ -195,9 +193,9 @@ print("========================================")
 model.summary()
 
 
-# ==========================================
+
 # 7. COMPILE
-# ==========================================
+
 
 model.compile(
 
@@ -211,9 +209,9 @@ model.compile(
 )
 
 
-# ==========================================
+
 # 8. CALLBACKS
-# ==========================================
+
 
 callbacks = [
 
@@ -248,9 +246,9 @@ callbacks = [
 ]
 
 
-# ==========================================
+
 # 9. TRAIN
-# ==========================================
+
 
 print("\n========================================")
 print("STARTING TRAINING")

@@ -1,74 +1,92 @@
-from pathlib import Path
-import sys
-
 import streamlit as st
-
-
-SRC_DIR = (
-    Path(__file__)
-    .resolve()
-    .parent.parent
-)
-
-sys.path.insert(
-    0,
-    str(SRC_DIR)
-)
-
-from predictor import (
-    load_class_names
-)
-
-
-@st.cache_data
-def load_classes():
-
-    return load_class_names()
 
 
 def render_classes():
 
     st.title(
-        "Traffic Sign Classes"
+        "🚦 Traffic Sign Classes"
     )
 
     st.write(
-        "All 52 traffic-sign classes supported by the model."
+        "The model recognizes 52 traffic-sign classes."
     )
 
     st.divider()
 
-    classes = load_classes()
+    classes = [
 
-    search = st.text_input(
-        "Search classes",
-        placeholder="Search for turn, speed, parking..."
-    )
+        "Axle weight limit",
+        "Bus stop",
+        "Cattle",
+        "Crossroads",
+        "Dip",
+        "Falling rocks",
+        "Filling station",
+        "First aid post",
+        "Give way",
+        "Guarded level crossing ahead",
+        "Height limit",
+        "Horn prohibited",
+        "Hotel",
+        "Length limit",
+        "Level crossing countdown marker",
+        "Loose gravel",
+        "Maximum speed limit (110 km/h)",
+        "Maximum speed limit (90 km/h)",
+        "Narrow bridge",
+        "Narrow road",
+        "No entry",
+        "No entry for bullock carts",
+        "No entry for cycles",
+        "No entry for goods vehicles",
+        "No entry for hand carts",
+        "No entry for motor vehicles",
+        "No entry for pedestrians",
+        "No left turn",
+        "No overtaking",
+        "No parking",
+        "No right turn",
+        "No stopping",
+        "No vehicles in both directions",
+        "Oblique side road junction",
+        "One-way traffic",
+        "Parking",
+        "Refreshments",
+        "Restaurant",
+        "Road hump",
+        "Roundabout",
+        "Side road junction",
+        "Staggered side road junction",
+        "Steep ascent",
+        "Steep descent",
+        "T-junction",
+        "Telephone",
+        "Turn left",
+        "Turn right",
+        "Unguarded level crossing ahead",
+        "Unprotected quay",
+        "Weight limit",
+        "Y-junction"
+    ]
 
-    rows = []
+    for i in range(
+        0,
+        len(classes),
+        2
+    ):
 
-    for class_id, name in classes.items():
+        col1, col2 = st.columns(2)
 
-        if (
-            not search
-            or search.lower()
-            in name.lower()
-        ):
+        with col1:
 
-            rows.append(
-                {
-                    "Class ID": class_id,
-                    "Traffic Sign": name
-                }
+            st.write(
+                f"**{i}.** {classes[i]}"
             )
 
-    st.caption(
-        f"{len(rows)} class(es)"
-    )
+        if i + 1 < len(classes):
 
-    st.dataframe(
-        rows,
-        use_container_width=True,
-        hide_index=True,
-        height=600
-    )
+            with col2:
+
+                st.write(
+                    f"**{i + 1}.** {classes[i + 1]}"
+                )

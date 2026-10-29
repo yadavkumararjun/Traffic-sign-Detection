@@ -1,24 +1,64 @@
 from pathlib import Path
 
-import cv2
 import numpy as np
+import tensorflow as tf
+from PIL import Image
 
 
-ROOT = Path(__file__).resolve().parent.parent
+# ============================================================
+# PATHS
+# ============================================================
 
-CLASS_PATH = (
+SRC_DIR = Path(__file__).resolve().parent
+ROOT = SRC_DIR.parent
+
+MODEL_PATH = (
+    ROOT
+    / "models"
+    / "traffic_sign_robust_model.keras"
+)
+
+CLASS_NAMES_PATH = (
     ROOT
     / "data"
     / "semantic_class_names.txt"
 )
 
 
+# ============================================================
+# SETTINGS
+# ============================================================
+
+IMAGE_SIZE = 32
+
+
+# ============================================================
+# LOAD MODEL
+# ============================================================
+
+def load_model():
+
+    print("Loading traffic sign model...")
+
+    model = tf.keras.models.load_model(
+        MODEL_PATH
+    )
+
+    print("Model loaded successfully!")
+
+    return model
+
+
+# ============================================================
+# LOAD CLASS NAMES
+# ============================================================
+
 def load_class_names():
 
-    classes = {}
+    class_names = []
 
     with open(
-        CLASS_PATH,
+        CLASS_NAMES_PATH,
         "r",
         encoding="utf-8"
     ) as file:
@@ -30,141 +70,73 @@ def load_class_names():
             if not line:
                 continue
 
-            class_id, name = line.split(
+            parts = line.split(
                 ",",
                 1
             )
 
-            classes[int(class_id)] = name
+            if len(parts) == 2:
 
-    return classes
+                class_names.append(
+                    parts[1].strip()
+                )
+
+    return class_names
 
 
-def preprocess_image(
-    image,
-    image_size=32
-):
+# ============================================================
+# PREPROCESS IMAGE
+# ============================================================
 
-    # PIL → NumPy
-    image = np.array(
-        image.convert("RGB")
-    )
+def preprocess_image(image):
 
-    # RGB → BGR
-    image = cv2.cvtColor(
-        image,
-        cv2.COLOR_RGB2BGR
-    )
+    # PIL -> RGB
+    image = image.convert("RGB")
 
-    height, width = image.shape[:2]
-
-    # Preserve aspect ratio
-    scale = min(
-        image_size / width,
-        image_size / height
-    )
-
-    new_width = max(
-        1,
-        round(width * scale)
-    )
-
-    new_height = max(
-        1,
-        round(height * scale)
-    )
-
-    resized = cv2.resize(
-        image,
+    # Resize
+    image = image.resize(
         (
-            new_width,
-            new_height
-        ),
-        interpolation=cv2.INTER_AREA
+            IMAGE_SIZE,
+            IMAGE_SIZE
+        )
     )
 
-    # 32 × 32 canvas
-    canvas = np.zeros(
-        (
-            image_size,
-            image_size,
-            3
-        ),
-        dtype=np.uint8
-    )
-
-    x = (
-        image_size - new_width
-    ) // 2
-
-    y = (
-        image_size - new_height
-    ) // 2
-
-    canvas[
-        y:y + new_height,
-        x:x + new_width
-    ] = resized
-
-    # BGR → RGB
-    canvas = cv2.cvtColor(
-        canvas,
-        cv2.COLOR_BGR2RGB
+    # Convert to numpy
+    image_array = np.array(
+        image,
+        dtype=np.float32
     )
 
     # Normalize
-    canvas = (
-        canvas.astype(
-            np.float32
-        ) / 255.0
+    image_array = (
+        image_array / 255.0
     )
 
-    # Batch dimension
-    canvas = np.expand_dims(
-        canvas,
+    # Add batch dimension
+    image_array = np.expand_dims(
+        image_array,
         axis=0
     )
 
-    return canvas
+    return image_array
 
 
-def predict(
+# ============================================================
+# PREDICT IMAGE
+# ============================================================
+
+def predict_image(
     model,
-    image,
-    class_names
+    image
 ):
 
-    processed = preprocess_image(
-        image
+    processed_image = (
+        preprocess_image(image)
     )
 
-    probabilities = model.predict(
-        processed,
+    predictions = model.predict(
+        processed_image,
         verbose=0
-    )[0]
+    )
 
-    top_indices = np.argsort(
-        probabilities
-    )[::-1][:5]
-
-    results = []
-
-    for index in top_indices:
-
-        index = int(index)
-
-        results.append(
-            {
-                "id": index,
-                "name": class_names.get(
-                    index,
-                    f"Class {index}"
-                ),
-                "confidence":
-                    float(
-                        probabilities[index]
-                    ) * 100
-            }
-        )
-
-    return results
+    return predictions

@@ -5,53 +5,44 @@ import numpy as np
 # SETTINGS
 # ============================================================
 
-# Minimum confidence to consider a prediction reliable
 CONFIDENCE_THRESHOLD = 0.70
 
-# Below this confidence, reject as unknown
-UNKNOWN_THRESHOLD = 0.40
-
-# Difference between first and second prediction
 MARGIN_THRESHOLD = 0.15
 
-# Strong uncertainty indicator
 ENTROPY_THRESHOLD = 2.5
 
 
 # ============================================================
-# GET PREDICTION INFORMATION
+# CHECK PREDICTION
 # ============================================================
 
-def check_prediction_confidence(predictions):
+def check_prediction_confidence(
+    predictions
+):
 
     probabilities = np.asarray(
         predictions,
         dtype=np.float64
     )
 
-    # --------------------------------------------------------
-    # Handle shape:
-    # (1, 52)
-    # or
-    # (52,)
-    # --------------------------------------------------------
-
+    # Handle (1, 52)
     if probabilities.ndim == 2:
-        probabilities = probabilities[0]
 
-    # --------------------------------------------------------
+        probabilities = (
+            probabilities[0]
+        )
+
     # Safety normalization
-    # --------------------------------------------------------
-
     total = probabilities.sum()
 
     if total > 0:
+
         probabilities = (
             probabilities / total
         )
 
     # --------------------------------------------------------
-    # Sort probabilities
+    # Sort predictions
     # --------------------------------------------------------
 
     sorted_indices = np.argsort(
@@ -99,26 +90,27 @@ def check_prediction_confidence(predictions):
     )
 
     # --------------------------------------------------------
-    # DECISION
+    # Decision
     # --------------------------------------------------------
 
-    # Very low confidence
-    if top_confidence < UNKNOWN_THRESHOLD:
+    if (
+        top_confidence
+        < CONFIDENCE_THRESHOLD
+    ):
 
         status = "unknown"
 
-    # Medium confidence
-    elif top_confidence < CONFIDENCE_THRESHOLD:
+    elif (
+        margin
+        < MARGIN_THRESHOLD
+    ):
 
         status = "uncertain"
 
-    # Very close competing predictions
-    elif margin < MARGIN_THRESHOLD:
-
-        status = "uncertain"
-
-    # High overall uncertainty
-    elif entropy > ENTROPY_THRESHOLD:
+    elif (
+        entropy
+        > ENTROPY_THRESHOLD
+    ):
 
         status = "uncertain"
 
@@ -126,28 +118,29 @@ def check_prediction_confidence(predictions):
 
         status = "recognized"
 
-    # --------------------------------------------------------
-    # RETURN
-    # --------------------------------------------------------
-
     return {
 
         "top_class": top_class,
 
         "second_class": second_class,
 
-        "top_confidence": top_confidence,
+        "top_confidence":
+            top_confidence,
 
-        "second_confidence": second_confidence,
+        "second_confidence":
+            second_confidence,
 
-        "margin": margin,
+        "margin":
+            margin,
 
-        "entropy": entropy,
+        "entropy":
+            entropy,
 
-        "status": status,
+        "status":
+            status,
 
-        "probabilities": probabilities
-
+        "probabilities":
+            probabilities
     }
 
 
@@ -155,6 +148,8 @@ def check_prediction_confidence(predictions):
 # GET STATUS
 # ============================================================
 
-def get_prediction_status(result):
+def get_prediction_status(
+    result
+):
 
     return result["status"]

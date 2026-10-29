@@ -4,50 +4,63 @@ import streamlit as st
 def render_about():
 
     st.title(
-        "About the Project"
+        "ℹ️ About"
     )
 
     st.write(
-        "CNN-based Traffic Sign Recognition System"
+        """
+        Traffic Sign AI is a deep-learning based traffic sign
+        recognition system.
+        """
     )
 
     st.divider()
 
     st.subheader(
-        "Project Overview"
-    )
-
-    st.write(
-        "This project uses a Convolutional Neural Network "
-        "to classify traffic-sign images into 52 semantic "
-        "traffic-sign classes."
-    )
-
-    st.subheader(
-        "Final Model"
+        "Technology"
     )
 
     st.write(
         """
-        - Architecture: Robust CNN
-        - Input: 32 × 32 RGB
-        - Classes: 52
-        - Test accuracy: 94.20%
-        - Test loss: 0.1904
+        • Python
+        • TensorFlow
+        • Keras
+        • OpenCV
+        • NumPy
+        • Streamlit
         """
     )
 
+    st.divider()
+
     st.subheader(
-        "Image Processing"
+        "Model"
     )
 
     st.write(
-        "Uploaded images are converted to RGB, resized while "
-        "preserving their aspect ratio, centered inside a "
-        "32 × 32 canvas, normalized, and passed to the CNN."
+        """
+        The application uses a robust CNN model trained to
+        recognize 52 traffic-sign classes.
+        """
     )
+
+    st.metric(
+        "Test Accuracy",
+        "94.20%"
+    )
+
+    st.metric(
+        "Number of Classes",
+        "52"
+    )
+
+    st.metric(
+        "Test Images",
+        "2,795"
+    )
+
+    st.divider()
 
     st.info(
-        "Camera functionality is intentionally disabled "
-        "in this version."
+        "Camera-based recognition is intentionally not included yet."
     )
